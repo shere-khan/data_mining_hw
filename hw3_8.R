@@ -58,10 +58,10 @@ points(4, backward.summary$adjr2[4], pch = 4, col = "red", lwd = 7)
 # Lasso Regression
 library(glmnet)
 X.matrix = model.matrix(y~poly(X, 10, raw=T), data=data.xy)[, -1]
-model.lasso = cv.glmnet(xmat, Y, alpha=1)
+model.lasso = cv.glmnet(X.matrix, Y, alpha=1)
 lam = model.lasso$lambda.min
 lam
-plot(mod.lasso)
-# Next fit the model on entire data using best lambda
-best.model = glmnet(xmat, Y, alpha=1)
-predict(best.model, s=best.lambda, type="coefficients")
+plot(model.lasso)
+
+best.model = glmnet(X.matrix, Y, alpha=1)
+predict(best.model, s=lam, type="coefficients")
