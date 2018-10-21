@@ -39,3 +39,29 @@ backward.summary = summary(backward)
 which.min(backward.summary$cp)
 which.min(backward.summary$bic)
 which.min(backward.summary$adjr2)
+
+# Combined graphs for Forward and Backward Selection
+par(mfrow = c(3, 2))
+plot(forward.summary$cp, xlab = "Subset Size", ylab = "Forward Cp", pch = 20, type = "l")
+points(3, forward.summary$cp[3], pch = 4, col = "red", lwd = 7)
+plot(backward.summary$cp, xlab = "Subset Size", ylab = "Backward Cp", pch = 20, type = "l")
+points(3, backward.summary$cp[3], pch = 4, col = "red", lwd = 7)
+plot(forward.summary$bic, xlab = "Subset Size", ylab = "Forward BIC", pch = 20,  type = "l")
+points(3, forward.summary$bic[3], pch = 4, col = "red", lwd = 7)
+plot(backward.summary$bic, xlab = "Subset Size", ylab = "Backward BIC", pch = 20,  type = "l")
+points(3, backward.summary$bic[3], pch = 4, col = "red", lwd = 7)
+plot(forward.summary$adjr2, xlab = "Subset Size", ylab = "Forward Adjusted R2",  pch = 20, type = "l")
+points(3, forward.summary$adjr2[3], pch = 4, col = "red", lwd = 7)
+plot(backward.summary$adjr2, xlab = "Subset Size", ylab = "Backward Adjusted R2",  pch = 20, type = "l")
+points(4, backward.summary$adjr2[4], pch = 4, col = "red", lwd = 7)
+
+# Lasso Regression
+library(glmnet)
+X.matrix = model.matrix(y~poly(X, 10, raw=T), data=data.xy)[, -1]
+model.lasso = cv.glmnet(xmat, Y, alpha=1)
+lam = model.lasso$lambda.min
+lam
+plot(mod.lasso)
+# Next fit the model on entire data using best lambda
+best.model = glmnet(xmat, Y, alpha=1)
+predict(best.model, s=best.lambda, type="coefficients")
