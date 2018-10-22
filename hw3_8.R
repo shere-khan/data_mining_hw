@@ -8,6 +8,8 @@ b2 = 2
 b3 = 0.2
 Y = b0 + b1*X + b2*(X^2) + b3*(X^3) + e
 data.xy = data.frame(y = Y, x = X)
+
+# Best subset selection
 subset = regsubsets(Y~poly(X, 10, raw=T), data=data.xy, nvmax=10)
 best.summary = summary(subset)
 
@@ -63,5 +65,37 @@ lam = model.lasso$lambda.min
 lam
 plot(model.lasso)
 
+best.model = glmnet(X.matrix, Y, alpha=1)
+predict(best.model, s=lam, type="coefficients")
+
+# 8f
+b0 = 2
+b7 = 3
+Y = b0 + b7*(X^7) + e
+data.xy = data.frame(y = Y, x = X)
+# Best subset
+subset = regsubsets(Y~poly(X, 10, raw=T), data=data.xy, nvmax=10)
+best.summary = summary(subset)
+# C_p
+which.min(best.summary$cp)
+plot(best.summary$cp, xlab="Size of Subset", ylab="C_p", pch=20, type="l")
+points(3, best.summary$cp[3], pch=4, col="red", lwd=7)
+# BIC
+which.min(best.summary$bic)
+plot(best.summary$bic, xlab="Size of Subset", ylab="BIC", pch=20, type="l")
+points(3, best.summary$bic[3], pch=4, col="red", lwd=7)
+# Adjusted R^2
+which.max(best.summary$adjr2)
+plot(best.summary$adjr2, xlab="Size of Subset", ylab="AR^2", pch=20, type="l")
+points(3, best.summary$adjr2[3], pch=4, col="red", lwd=7)
+# Coefficients
+coefficients(subset, id=1)
+coefficients(subset, id=2)
+coefficients(subset, id=6)
+# Lasso
+X.matrix = model.matrix(y~poly(X, 10, raw=T), data=data.xy)[, -1]
+model.lasso = cv.glmnet(X.matrix, Y, alpha=1)
+lam = model.lasso$lambda.min
+lam
 best.model = glmnet(X.matrix, Y, alpha=1)
 predict(best.model, s=lam, type="coefficients")
