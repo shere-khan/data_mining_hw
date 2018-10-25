@@ -48,11 +48,10 @@ pls.pred = predict(pls.fit, data.test, ncomp=10)
 mean((data.test[, "Apps"] - data.frame(pls.pred))^2)
 
 # compare results
-
 test.avg = mean(data.test[, "Apps"])
-lm.test.r2 = 1 - mean((data.test[, "Apps"] - lm.pred)^2) /mean((data.test[, "Apps"] - test.avg)^2)
-ridge.test.r2 = 1 - mean((data.test[, "Apps"] - ridge.pred)^2) /mean((data.test[, "Apps"] - test.avg)^2)
-lasso.test.r2 = 1 - mean((data.test[, "Apps"] - lasso.pred)^2) /mean((data.test[, "Apps"] - test.avg)^2)
-pcr.test.r2 = 1 - mean((data.test[, "Apps"] - data.frame(pcr.pred))^2) /mean((data.test[, "Apps"] - test.avg)^2)
-pls.test.r2 = 1 - mean((data.test[, "Apps"] - data.frame(pls.pred))^2) /mean((data.test[, "Apps"] - test.avg)^2)
-barplot(c(lm.test.r2, ridge.test.r2, lasso.test.r2, pcr.test.r2, pls.test.r2), col="red", names.arg=c("OLS", "Ridge", "Lasso", "PCR", "PLS"), main="Test R-squared")
+test_lm_r2 = 1 - mean((data.test[, "Apps"] - lm.pred)^2) /mean((data.test[, "Apps"] - test.avg)^2)
+test_ridge_r2 = 1 - mean((data.test[, "Apps"] - ridge.pred)^2) /mean((data.test[, "Apps"] - test.avg)^2)
+test_lasso_r2 = 1 - mean((data.test[, "Apps"] - lasso.pred)^2) /mean((data.test[, "Apps"] - test.avg)^2)
+test_pcr_r2 = 1 - mean((data.test[, "Apps"] - data.frame(pcr.pred))^2) /mean((data.test[, "Apps"] - test.avg)^2)
+test_pls_r2 = 1 - mean((data.test[, "Apps"] - data.frame(pls.pred))^2) /mean((data.test[, "Apps"] - test.avg)^2)
+barplot(c(test_lm_r2, test_ridge_r2, test_lasso_r2, test_pcr_r2, test_pls_r2), col="red", names.arg=c("OLS", "Ridge", "Lasso", "PCR", "PLS"), main="Test R-squared")
