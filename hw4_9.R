@@ -47,6 +47,9 @@ all.cv = rep(NA, 16)
 for (i in 3:16) {
   lm.fit = lm(nox ~ bs(dis, df = i), data = Boston)
   all.cv[i] = sum(lm.fit$residuals^2)
+  sp.pred = predict(lm.fit, list(dis = dis.grid))
+  plot(nox ~ dis, data = Boston, col = "darkgrey")
+  lines(dis.grid, sp.pred, col = "red", lwd = 2)
 }
 all.cv[-c(1, 2)]
 
@@ -56,3 +59,4 @@ for (i in 3:16) {
   lm.fit = glm(nox ~ bs(dis, df = i), data = Boston)
   all.cv[i] = cv.glm(Boston, lm.fit, K = 10)$delta[2]
 }
+plot(3:16, all.cv[-c(1, 2)], lwd = 2, type = "l", xlab = "df", ylab = "CV error")
